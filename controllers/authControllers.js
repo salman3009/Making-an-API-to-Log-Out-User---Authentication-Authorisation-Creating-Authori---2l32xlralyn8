@@ -31,6 +31,25 @@ Output:
 const logout = (req, res) => {
     const token = req.headers.authorization;
     // Write your code here :)
+    if(!token){
+        return res.status(401).json({
+            message:'Authentication failed: Missing token.',
+            status:'Error'
+        })
+    }
+    try{
+     jwt.verify(token,JWT_SECRET);
+     res.clearCookie('token');
+     return res.status(200).json({
+        message:'Logged out successfully.',
+        status:'Success'
+     })
+    }catch(err){
+       return res.status(401).json({
+        message:'Authentication failed: Invalid token.',
+        status:'Error'
+       })
+    }
 };
 
 const signup = async (req, res) => {
